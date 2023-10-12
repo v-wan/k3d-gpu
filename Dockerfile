@@ -12,9 +12,10 @@ RUN apt-get update && \
     apt-get -y install gnupg2 curl
 
 # Install NVIDIA Container Runtime
-RUN curl -s -L https://nvidia.github.io/nvidia-container-runtime/gpgkey | apt-key add -
-
-RUN curl -s -L https://nvidia.github.io/nvidia-container-runtime/ubuntu22.04/nvidia-container-runtime.list | tee /etc/apt/sources.list.d/nvidia-container-runtime.list
+RUN curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
+      && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+        sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+        sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
 
 RUN apt-get update && \
     apt-get -y install nvidia-container-runtime=${NVIDIA_CONTAINER_RUNTIME_VERSION}
