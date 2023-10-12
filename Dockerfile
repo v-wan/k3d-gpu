@@ -6,11 +6,19 @@ FROM nvidia/cuda:11.8.0-base-ubuntu22.04
 ARG NVIDIA_CONTAINER_RUNTIME_VERSION
 ENV NVIDIA_CONTAINER_RUNTIME_VERSION=$NVIDIA_CONTAINER_RUNTIME_VERSION
 
+# Import the public GPG key for the NVIDIA Container Toolkit
+RUN curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+
+# Add the NVIDIA Container Toolkit repository
+RUN curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+    sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+    tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+
 RUN apt-get update && \
-    apt-get -y install gnupg2 curl nvidia-container-runtime=${NVIDIA_CONTAINER_RUNTIME_VERSION} && \
     chmod 1777 /tmp && \
     mkdir -p /var/lib/rancher/k3s/agent/etc/containerd && \
-    mkdir -p /var/lib/rancher/k3s/server/manifests
+    mkdir -p /var/lib/rancher/k3s/server/manifests && \
+    apt-get -y install nvidia-container-runtime=${NVIDIA_CONTAINER_RUNTIME_VERSION}
 
 COPY --from=k3s /bin /bin
 COPY --from=k3s /etc /etc
