@@ -2,7 +2,7 @@
 
 set -euxo pipefail
 
-K3S_TAG=${K3S_TAG:="v1.21.2-k3s1"} # replace + with -, if needed
+K3S_TAG=${K3S_TAG:="v1.27.4-k3s1"} # replace + with -, if needed
 IMAGE_REGISTRY=${IMAGE_REGISTRY:="vlatitude/k3d-gpu"}
 IMAGE_REPOSITORY=${IMAGE_REPOSITORY:="rancher/k3s"}
 IMAGE_TAG="$K3S_TAG-cuda"
