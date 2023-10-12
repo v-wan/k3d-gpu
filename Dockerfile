@@ -18,7 +18,7 @@ RUN apt-get update && \
     chmod 1777 /tmp && \
     mkdir -p /var/lib/rancher/k3s/agent/etc/containerd && \
     mkdir -p /var/lib/rancher/k3s/server/manifests && \
-    apt-get -y install nvidia-container-runtime=${NVIDIA_CONTAINER_RUNTIME_VERSION}
+    apt-get -y install gnupg2 curl nvidia-container-runtime=${NVIDIA_CONTAINER_RUNTIME_VERSION}
 
 COPY --from=k3s /bin /bin
 COPY --from=k3s /etc /etc
